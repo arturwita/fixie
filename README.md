@@ -1,7 +1,34 @@
 # Fixie
 ![Fixie logo](https://github.com/arturwita/fixie/raw/master/images/fixie-logo.png) 
 
-Fixie is an example of a fixing system for companies. It allows it's customers to report a request of fixing a thing (e.g. a customer wants to have his car doors repaired and then repainted). This request is processed by the system manager who divides incoming requests on smaller activities and assigns them to workers.
+Fixie is an example of a fixing system for companies. It helps to process clients requests,
+divide them into few smaller activities and assign them to workers.
+
+# Possible roles
+### Admin
+
+Responsibilites:
+- creating users and assigning them a role
+- changing their attributes
+- creating / updating dictionaries for objects and activities.
+
+### Manager
+
+Responsibilites:
+- processing client data
+- processing object data 
+- registering requests
+- dividing requests into activities
+- assigning activities to workers
+- watching activities status
+- closing / canceling activities
+- closing / canceling requests
+
+### Worker
+
+Responsibilites:
+- working on activities
+- canceling activities
 
 # Usage
 
