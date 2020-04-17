@@ -39,7 +39,7 @@ TODO
  - Microservices architecture
  - Spring Boot
  - Hibernate
- - ReactJS 
+ - AngularJS 
  
 ## Collaborators
 
