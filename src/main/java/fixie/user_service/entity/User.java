@@ -9,11 +9,11 @@ import javax.persistence.*;
 
 
 @Data
-@Builder(toBuilder = true)
 @Entity
-@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
+@Builder(toBuilder = true)
 public class User implements Serializable {
 
     @Id
