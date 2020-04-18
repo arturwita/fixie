@@ -65,4 +65,9 @@ public class UserService implements IUserService {
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
+
+    @Override
+    public String grantRole(String username, String password) {
+        return null;
+    }
 }

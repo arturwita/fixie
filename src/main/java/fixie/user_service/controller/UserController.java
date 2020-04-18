@@ -5,6 +5,7 @@ import fixie.user_service.dto.UserDTO;
 import fixie.user_service.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,4 +28,15 @@ public class UserController {
     public String login(@RequestBody UserDTO user) {
         return userService.login(user.username, user.password);
     }
+
+    @PostMapping("/grantRole")
+    public String grantRole(@RequestHeader String token, @RequestBody UserDTO user) {
+        return userService.grantRole(token, user.username);
+    }
+
+//    TODO: updateUser
+//    @PutMapping("/updateUser")
+//    public String updateUser(@RequestHeader String token, @RequestBody UserDTO user) {
+//        return userService.updateUser(token, user);
+//    }
 }
