@@ -1,6 +1,7 @@
 package fixie.user_service.service;
 
 import java.util.Date;
+import java.time.Instant;
 
 import io.jsonwebtoken.Jwts;
 import fixie.user_service.entity.User;
@@ -39,7 +40,7 @@ public class UserService implements IUserService {
 
         this.repository.save(user);
 
-        long now = System.currentTimeMillis();
+        long now = Instant.now().toEpochMilli();
         return Jwts.builder()
                 .setSubject("User")
                 .claim("username", user.getUsername())
@@ -56,7 +57,7 @@ public class UserService implements IUserService {
             throw new UserUnauthorizedException();
         }
 
-        long now = System.currentTimeMillis();
+        long now = Instant.now().toEpochMilli();
         return Jwts.builder()
                 .setSubject("User")
                 .claim("username", user.getUsername())
