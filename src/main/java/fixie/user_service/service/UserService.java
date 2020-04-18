@@ -41,7 +41,8 @@ public class UserService implements IUserService {
 
         long now = System.currentTimeMillis();
         return Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject("User")
+                .claim("username", user.getUsername())
                 .claim("role", user.getRole())
                 .setExpiration(new Date(now + 10000))
                 .signWith(SignatureAlgorithm.HS256, secret)
@@ -57,7 +58,8 @@ public class UserService implements IUserService {
 
         long now = System.currentTimeMillis();
         return Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject("User")
+                .claim("username", user.getUsername())
                 .claim("role", user.getRole())
                 .setExpiration(new Date(now + 10000))
                 .signWith(SignatureAlgorithm.HS256, secret)
