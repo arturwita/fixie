@@ -10,8 +10,7 @@ public class UserServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(UserServiceApplication.class);
-		app.setDefaultProperties(Collections
-				.singletonMap("server.port", "8000"));
+		app.setDefaultProperties(Collections.singletonMap("server.port", "8000"));
 		app.run(args);
 	}
 
