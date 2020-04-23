@@ -28,3 +28,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### SSL Key ###
+/src/main/resources/fixie_ssl.p12
