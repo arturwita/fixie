@@ -1,5 +1,6 @@
 package fixie.user_service.controller;
 
+import fixie.user_service.entity.User;
 import lombok.SneakyThrows;
 import fixie.user_service.dto.UserDTO;
 import fixie.user_service.service.UserService;
@@ -29,9 +30,10 @@ public class UserController {
         return userService.login(user.username, user.password);
     }
 
+    @SneakyThrows
     @PostMapping("/grantRole")
-    public String grantRole(@RequestHeader String token, @RequestBody UserDTO user) {
-        return userService.grantRole(token, user.username);
+    public User grantRole(@RequestHeader String token, @RequestBody UserDTO user) {
+        return userService.grantRole(token, user);
     }
 
 //    TODO: updateUser
