@@ -30,4 +30,4 @@ build/
 .vscode/
 
 ### SSL Key ###
-/src/main/resources/fixie_ssl.p12
+/src/main/resources/fixiekey.p12
