@@ -27,11 +27,23 @@ public class PartType implements Serializable {
     @Column(name = "name_type")
     private String nameType;
 
-
-    public void Nadpisz(PartTypeDTO partTypeDTO){
-        this.codeType=partTypeDTO.codeType;
-        this.nameType=partTypeDTO.codeType;
+    public String getCodeType() {
+        return codeType;
     }
+
+    public void setCodeType(String codeType) {
+        this.codeType = codeType;
+    }
+
+    public String getNameType() {
+        return nameType;
+    }
+
+    public void setNameType(String nameType) {
+        this.nameType = nameType;
+    }
+
+
 
 
 }
