@@ -1,9 +1,9 @@
 package fixie.user_service.service;
 
-import java.io.IOException;
 import java.util.*;
 import java.time.Instant;
 
+import fixie.common.InternalApiClient;
 import fixie.common.PossibleRoles;
 import fixie.user_service.dto.UserDTO;
 import fixie.user_service.exception.*;
@@ -11,12 +11,6 @@ import fixie.user_service.utils.UserServiceUtils;
 import io.jsonwebtoken.Jwts;
 import fixie.user_service.entity.User;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -30,33 +24,14 @@ public class UserService implements IUserService {
 
     private final UserRepository repository;
 
-    private HttpClient httpClient;
+    private InternalApiClient apiClient;
 
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${url.decode.token}")
-    private String decodeTokenURL;
-
     public UserService(UserRepository repository) {
         this.repository = repository;
-        this.httpClient = HttpClients.custom().build();
-    }
-
-    private HttpResponse decodeTokenRequest(String token) throws IOException {
-        HttpUriRequest request = RequestBuilder.get()
-                .setUri(decodeTokenURL)
-                .setHeader("token", token)
-                .build();
-
-        return this.httpClient.execute(request);
-    }
-
-    private JSONObject getResponseBody(HttpResponse response) throws IOException, JSONException {
-        String content = EntityUtils.toString(response.getEntity());
-        JSONObject responseBody = new JSONObject(content);
-
-        return responseBody;
+        this.apiClient = new InternalApiClient();
     }
 
 
@@ -103,16 +78,20 @@ public class UserService implements IUserService {
 
     @Override
     public User grantRole(String token, UserDTO userDTO)
-            throws UserUnauthorizedException, UserNotFoundException, UnknownRoleException, IOException, BadRequestException, JSONException {
-        HttpResponse response = decodeTokenRequest(token);
-        if (response.getStatusLine().getStatusCode() >= 400) {
+            throws UserUnauthorizedException, UserNotFoundException, UnknownRoleException, BadRequestException {
+        JSONObject response = this.apiClient.decodeTokenRequest(token);
+        if (response == null) {
             throw new BadRequestException();
         }
 
-        JSONObject responseBody = this.getResponseBody(response);
-        String requestRole = responseBody.getString("role");
+        String permittedRole = null;
+        try {
+            permittedRole = response.getString("role");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        if (!requestRole.equals(PossibleRoles.ADMIN_MNEMO)) {
+        if (!permittedRole.equals(PossibleRoles.ADMIN_MNEMO)) {
             throw new UserUnauthorizedException();
         }
 
@@ -133,14 +112,18 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User changePassword(String token, UserDTO userDTO) throws BadRequestException, IOException, JSONException, UserNotFoundException {
-        HttpResponse response = decodeTokenRequest(token);
-        if (response.getStatusLine().getStatusCode() >= 400) {
+    public User changePassword(String token, UserDTO userDTO) throws BadRequestException, UserNotFoundException {
+        JSONObject response = this.apiClient.decodeTokenRequest(token);
+        if (response == null) {
             throw new BadRequestException();
         }
 
-        JSONObject responseBody = this.getResponseBody(response);
-        String username = responseBody.getString("username");
+        String username = null;
+        try {
+            username = response.getString("username");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         User foundUser = this.repository.findByUsername(username);
         if(foundUser == null) {
