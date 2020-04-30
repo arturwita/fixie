@@ -13,8 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "activity_dictionary")
 @Builder(toBuilder = true)
-public class ActivityDictionary implements Serializable {
-
+public class ActivityDictionary implements Serializable{
     @Id
     @Column(name = "act_type")
     private String actType;
@@ -22,19 +21,7 @@ public class ActivityDictionary implements Serializable {
     @Column(name = "act_name")
     private String actName;
 
-    public String getActType() {
-        return actType;
-    }
-
-    public void setActType(String actType) {
-        this.actType = actType;
-    }
-
-    public String getActName() {
-        return actName;
-    }
-
-    public void setActName(String actName) {
+    public void setActName(String actName){
         this.actName = actName;
     }
 }
