@@ -91,7 +91,7 @@ public class UserService implements IUserService {
             e.printStackTrace();
         }
 
-        if (!permittedRole.equals(PossibleRoles.ADMIN_MNEMO)) {
+        if (permittedRole == null || !permittedRole.equals(PossibleRoles.ADMIN_MNEMO)) {
             throw new UserUnauthorizedException();
         }
 
