@@ -20,8 +20,4 @@ public class ActivityDictionary implements Serializable{
 
     @Column(name = "act_name")
     private String actName;
-
-    public void setActName(String actName){
-        this.actName = actName;
-    }
 }

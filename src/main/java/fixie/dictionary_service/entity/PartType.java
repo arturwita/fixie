@@ -22,8 +22,4 @@ public class PartType implements Serializable{
 
     @Column(name = "name_type")
     private String nameType;
-
-    public void setNameType(String nameType){
-        this.nameType = nameType;
-    }
 }
