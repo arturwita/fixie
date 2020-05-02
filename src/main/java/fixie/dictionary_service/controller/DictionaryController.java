@@ -18,47 +18,46 @@ public class DictionaryController{
         this.dictionaryService = dictionaryService;
     }
 
-    @PostMapping ("/addPartType")
+    @PostMapping ("/partTypes")
     public PartType addPartType(@RequestBody PartTypeDTO partTypeDTO){
         return dictionaryService.addPartType(partTypeDTO);
     }
 
     @SneakyThrows
-    @DeleteMapping ("/deletePartType")
+    @DeleteMapping ("/partTypes")
     public Optional<PartType> deletePartType(@RequestBody PartTypeDTO partTypeDTO){
         return dictionaryService.deletePartType(partTypeDTO);
     }
 
     @SneakyThrows
-    @PutMapping ("/updatePartType")
+    @PutMapping ("/partTypes")
     public Optional<PartType> updatePartType(@RequestBody PartTypeDTO partTypeDTO) {
         return dictionaryService.updatePartType(partTypeDTO);
     }
 
-    @GetMapping ("/getPartTypes")
+    @GetMapping ("/partTypes")
     public List<PartType> getPartTypes() {
         return dictionaryService.getPartTypes();
     }
 
-    @PostMapping ("/addActivityDictionary")
+    @PostMapping ("/activityDictionary")
     public ActivityDictionary addActivityDictionary(@RequestBody ActivityDictionaryDTO activityDictionaryDTO){
         return dictionaryService.addActivityDictionary(activityDictionaryDTO);
     }
 
     @SneakyThrows
-    @DeleteMapping ("/deleteActivityDictionary")
+    @DeleteMapping ("/activityDictionary")
     public Optional<ActivityDictionary> deleteActivityDictionary(@RequestBody ActivityDictionaryDTO activityDictionaryDTO){
         return dictionaryService.deleteActivityDictionary(activityDictionaryDTO);
     }
 
     @SneakyThrows
-    @PutMapping ("/updateActivityDictionary")
+    @PutMapping ("/activityDictionary")
     public Optional<ActivityDictionary> updateActivityDictionary(@RequestBody ActivityDictionaryDTO activityDictionaryDTO){
         return dictionaryService.updateActivityDictionary(activityDictionaryDTO);
     }
 
-
-    @GetMapping ("/getActivityDictionaries")
+    @GetMapping ("/activityDictionary")
     public List<ActivityDictionary> getActivityDictionaries(){
         return dictionaryService.getActivityDictionaries();
     }
