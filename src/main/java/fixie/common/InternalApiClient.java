@@ -1,5 +1,6 @@
 package fixie.common;
 
+import fixie.user_service.exception.BadRequestException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -45,5 +46,22 @@ public class InternalApiClient {
         }
 
         return  responseBody;
+    }
+
+    public String getRoleFromTokenInHeader(String token) throws BadRequestException {
+        JSONObject decodedToken = this.decodeTokenRequest(token);
+
+        if (decodedToken == null) {
+            throw new BadRequestException();
+        }
+
+        String role = null;
+        try {
+            role = decodedToken.getString("role");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return role;
     }
 }

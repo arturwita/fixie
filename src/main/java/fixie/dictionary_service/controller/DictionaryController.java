@@ -19,21 +19,22 @@ public class DictionaryController {
         this.dictionaryService = dictionaryService;
     }
 
+    @SneakyThrows
     @PostMapping("/partTypes")
-    public PartType addPartType(@RequestBody PartTypeDTO partTypeDTO) {
-        return dictionaryService.addPartType(partTypeDTO);
+    public PartType addPartType(@RequestHeader String token, @RequestBody PartTypeDTO partTypeDTO) {
+        return dictionaryService.addPartType(token, partTypeDTO);
     }
 
     @SneakyThrows
     @DeleteMapping("/partTypes")
-    public Optional<PartType> deletePartType(@RequestBody PartTypeDTO partTypeDTO) {
-        return dictionaryService.deletePartType(partTypeDTO);
+    public Optional<PartType> deletePartType(@RequestHeader String token, @RequestBody PartTypeDTO partTypeDTO) {
+        return dictionaryService.deletePartType(token, partTypeDTO);
     }
 
     @SneakyThrows
     @PutMapping("/partTypes")
-    public Optional<PartType> updatePartType(@RequestBody PartTypeDTO partTypeDTO) {
-        return dictionaryService.updatePartType(partTypeDTO);
+    public Optional<PartType> updatePartType(@RequestHeader String token, @RequestBody PartTypeDTO partTypeDTO) {
+        return dictionaryService.updatePartType(token, partTypeDTO);
     }
 
     @GetMapping("/partTypes")
@@ -41,21 +42,27 @@ public class DictionaryController {
         return dictionaryService.getPartTypes();
     }
 
+
+
+    @SneakyThrows
     @PostMapping("/activityDictionary")
-    public ActivityDictionary addActivityDictionary(@RequestBody ActivityDictionaryDTO activityDictionaryDTO) {
-        return dictionaryService.addActivityDictionary(activityDictionaryDTO);
+    public ActivityDictionary addActivityDictionary(@RequestHeader String token,
+                                                    @RequestBody ActivityDictionaryDTO activityDictionaryDTO) {
+        return dictionaryService.addActivityDictionary(token, activityDictionaryDTO);
     }
 
     @SneakyThrows
     @DeleteMapping("/activityDictionary")
-    public Optional<ActivityDictionary> deleteActivityDictionary(@RequestBody ActivityDictionaryDTO activityDictionaryDTO) {
-        return dictionaryService.deleteActivityDictionary(activityDictionaryDTO);
+    public Optional<ActivityDictionary> deleteActivityDictionary(@RequestHeader String token,
+                                                                 @RequestBody ActivityDictionaryDTO activityDictionaryDTO) {
+        return dictionaryService.deleteActivityDictionary(token, activityDictionaryDTO);
     }
 
     @SneakyThrows
     @PutMapping("/activityDictionary")
-    public Optional<ActivityDictionary> updateActivityDictionary(@RequestBody ActivityDictionaryDTO activityDictionaryDTO) {
-        return dictionaryService.updateActivityDictionary(activityDictionaryDTO);
+    public Optional<ActivityDictionary> updateActivityDictionary(@RequestHeader String token,
+                                                                 @RequestBody ActivityDictionaryDTO activityDictionaryDTO) {
+        return dictionaryService.updateActivityDictionary(token, activityDictionaryDTO);
     }
 
     @GetMapping("/activityDictionary")

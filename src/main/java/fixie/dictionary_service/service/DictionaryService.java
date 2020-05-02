@@ -1,5 +1,7 @@
 package fixie.dictionary_service.service;
 
+import fixie.common.InternalApiClient;
+import fixie.common.PossibleRoles;
 import fixie.dictionary_service.dto.ActivityDictionaryDTO;
 import fixie.dictionary_service.dto.PartTypeDTO;
 import fixie.dictionary_service.entity.ActivityDictionary;
@@ -8,19 +10,26 @@ import fixie.dictionary_service.exception.ActivityDictionaryNotFoundException;
 import fixie.dictionary_service.exception.PartTypeNotFoundException;
 import fixie.dictionary_service.repository.ActivityDictionaryRepository;
 import fixie.dictionary_service.repository.PartTypeRepository;
+import fixie.user_service.exception.BadRequestException;
+import fixie.user_service.exception.UserUnauthorizedException;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class DictionaryService implements IDictionaryService {
+
     private final PartTypeRepository partTypeRepository;
 
     private final ActivityDictionaryRepository activityDictionaryRepository;
 
+    private InternalApiClient apiClient;
+
     public DictionaryService(PartTypeRepository partTypeRepository, ActivityDictionaryRepository activityRepository) {
         this.partTypeRepository = partTypeRepository;
         this.activityDictionaryRepository = activityRepository;
+        this.apiClient = new InternalApiClient();
     }
 
     @Override
@@ -29,7 +38,13 @@ public class DictionaryService implements IDictionaryService {
     }
 
     @Override
-    public PartType addPartType(PartTypeDTO partTypeDTO) {
+    public PartType addPartType(String token, PartTypeDTO partTypeDTO) throws BadRequestException, UserUnauthorizedException {
+        String role = this.apiClient.getRoleFromTokenInHeader(token);
+
+        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
+            throw new UserUnauthorizedException();
+        }
+
         PartType partType = PartType.builder()
                 .codeType(partTypeDTO.codeType)
                 .nameType(partTypeDTO.nameType)
@@ -41,7 +56,14 @@ public class DictionaryService implements IDictionaryService {
     }
 
     @Override
-    public Optional<PartType> deletePartType(PartTypeDTO partTypeDTO) throws PartTypeNotFoundException {
+    public Optional<PartType> deletePartType(String token, PartTypeDTO partTypeDTO)
+            throws BadRequestException, UserUnauthorizedException, PartTypeNotFoundException {
+        String role = this.apiClient.getRoleFromTokenInHeader(token);
+
+        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
+            throw new UserUnauthorizedException();
+        }
+
         Optional<PartType> partType = this.partTypeRepository.findById(partTypeDTO.codeType);
 
         if(partType.isPresent()) {
@@ -55,7 +77,14 @@ public class DictionaryService implements IDictionaryService {
     }
 
     @Override
-    public Optional<PartType> updatePartType(PartTypeDTO partTypeDTO) throws PartTypeNotFoundException {
+    public Optional<PartType> updatePartType(String token, PartTypeDTO partTypeDTO)
+            throws BadRequestException, UserUnauthorizedException, PartTypeNotFoundException {
+        String role = this.apiClient.getRoleFromTokenInHeader(token);
+
+        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
+            throw new UserUnauthorizedException();
+        }
+
         Optional<PartType> partType = this.partTypeRepository.findById(partTypeDTO.codeType);
 
         if(partType.isPresent()) {
@@ -77,7 +106,14 @@ public class DictionaryService implements IDictionaryService {
     }
 
     @Override
-    public ActivityDictionary addActivityDictionary(ActivityDictionaryDTO activityDictionaryDTO) {
+    public ActivityDictionary addActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
+            throws BadRequestException, UserUnauthorizedException {
+        String role = this.apiClient.getRoleFromTokenInHeader(token);
+
+        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
+            throw new UserUnauthorizedException();
+        }
+
         ActivityDictionary activityDictionary = ActivityDictionary.builder()
                 .actType(activityDictionaryDTO.actType)
                 .actName(activityDictionaryDTO.actName)
@@ -89,8 +125,14 @@ public class DictionaryService implements IDictionaryService {
     }
 
     @Override
-    public Optional<ActivityDictionary> deleteActivityDictionary(ActivityDictionaryDTO activityDictionaryDTO)
-            throws ActivityDictionaryNotFoundException {
+    public Optional<ActivityDictionary> deleteActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
+            throws BadRequestException, UserUnauthorizedException, ActivityDictionaryNotFoundException {
+        String role = this.apiClient.getRoleFromTokenInHeader(token);
+
+        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
+            throw new UserUnauthorizedException();
+        }
+
         Optional<ActivityDictionary> activityDictionary = this.activityDictionaryRepository.findById(activityDictionaryDTO.actType);
 
         if(activityDictionary.isPresent()) {
@@ -104,8 +146,14 @@ public class DictionaryService implements IDictionaryService {
     }
 
     @Override
-    public Optional<ActivityDictionary> updateActivityDictionary(ActivityDictionaryDTO activityDictionaryDTO)
-            throws ActivityDictionaryNotFoundException {
+    public Optional<ActivityDictionary> updateActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
+            throws BadRequestException, UserUnauthorizedException, ActivityDictionaryNotFoundException {
+        String role = this.apiClient.getRoleFromTokenInHeader(token);
+
+        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
+            throw new UserUnauthorizedException();
+        }
+
         Optional<ActivityDictionary> activityDictionary = this.activityDictionaryRepository.findById(activityDictionaryDTO.actType);
 
         if(activityDictionary.isPresent()) {
