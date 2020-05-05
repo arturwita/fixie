@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureException;
 
 public interface IAuthService {
-    Claims decodeToken(String token) throws SignatureException;
-//    String refreshToken() throws SignatureException;
+    Claims verifyToken(String token) throws SignatureException;
+
+    String refreshToken(String oldToken) throws SignatureException;
 }

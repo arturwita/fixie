@@ -17,15 +17,15 @@ public class AuthController {
     }
 
     @SneakyThrows
-    @GetMapping("/decodeToken")
-    public Claims decodeToken(@RequestHeader String token) {
-        return authService.decodeToken(token);
+    @GetMapping("/verifyToken")
+    public Claims verifyToken(@RequestHeader String token) {
+        return authService.verifyToken(token);
     }
 
-//    @SneakyThrows
-//    @GetMapping("/refreshToken")
-//    public String refreshToken() {
-//        return authService.refreshToken();
-//    }
+    @SneakyThrows
+    @GetMapping("/refreshToken")
+    public String refreshToken(@RequestHeader String token) {
+        return authService.refreshToken(token);
+    }
 
 }

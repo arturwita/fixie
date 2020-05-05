@@ -5,6 +5,8 @@ import java.time.Instant;
 
 import fixie.common.InternalApiClient;
 import fixie.common.PossibleRoles;
+import fixie.common.exception.BadRequestException;
+import fixie.common.exception.UnauthorizedException;
 import fixie.user_service.dto.UserDTO;
 import fixie.user_service.exception.*;
 import fixie.user_service.utils.UserServiceUtils;
@@ -60,10 +62,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String login(String username, String password) throws UserUnauthorizedException {
+    public String login(String username, String password) throws UnauthorizedException {
         User user = this.repository.findByUsername(username);
         if (user == null || !BCrypt.checkpw(password, user.getPassword())) {
-            throw new UserUnauthorizedException();
+            throw new UnauthorizedException();
         }
 
         long now = Instant.now().toEpochMilli();
@@ -78,11 +80,11 @@ public class UserService implements IUserService {
 
     @Override
     public User grantRole(String token, UserDTO userDTO)
-            throws UserUnauthorizedException, UserNotFoundException, UnknownRoleException, BadRequestException {
+            throws UnauthorizedException, UserNotFoundException, UnknownRoleException, BadRequestException {
         String role = this.apiClient.getRoleFromTokenInHeader(token);
 
         if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
-            throw new UserUnauthorizedException();
+            throw new UnauthorizedException();
         }
 
         User foundUser = this.repository.findByUsername(userDTO.username);
@@ -103,7 +105,7 @@ public class UserService implements IUserService {
 
     @Override
     public User changePassword(String token, UserDTO userDTO) throws BadRequestException, UserNotFoundException {
-        JSONObject response = this.apiClient.decodeTokenRequest(token);
+        JSONObject response = this.apiClient.verifyToken(token);
         if (response == null) {
             throw new BadRequestException();
         }
