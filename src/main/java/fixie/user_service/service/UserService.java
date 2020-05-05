@@ -79,19 +79,9 @@ public class UserService implements IUserService {
     @Override
     public User grantRole(String token, UserDTO userDTO)
             throws UserUnauthorizedException, UserNotFoundException, UnknownRoleException, BadRequestException {
-        JSONObject response = this.apiClient.decodeTokenRequest(token);
-        if (response == null) {
-            throw new BadRequestException();
-        }
+        String role = this.apiClient.getRoleFromTokenInHeader(token);
 
-        String permittedRole = null;
-        try {
-            permittedRole = response.getString("role");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if (permittedRole == null || !permittedRole.equals(PossibleRoles.ADMIN_MNEMO)) {
+        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
             throw new UserUnauthorizedException();
         }
 
