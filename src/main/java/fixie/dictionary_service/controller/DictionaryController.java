@@ -21,6 +21,12 @@ public class DictionaryController {
         this.dictionaryService = dictionaryService;
     }
 
+    /*
+    #####
+    ##### PartTypes connected methods
+    #####
+     */
+
     @SneakyThrows
     @PostMapping("/partTypes")
     public PartType addPartType(@RequestHeader String token, @Valid @RequestBody PartTypeDTO partTypeDTO) {
@@ -38,7 +44,11 @@ public class DictionaryController {
         return dictionaryService.getPartTypes();
     }
 
-
+    /*
+    #####
+    ##### ActivityDictionary connected methods
+    #####
+     */
 
     @SneakyThrows
     @PostMapping("/activityDictionary")

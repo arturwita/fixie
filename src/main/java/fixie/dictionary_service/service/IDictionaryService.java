@@ -17,17 +17,17 @@ public interface IDictionaryService {
     List<PartType> getPartTypes();
 
     PartType addPartType(String token, PartTypeDTO partTypeDTO)
-            throws BadRequestException, UnauthorizedException;
+            throws UnauthorizedException;
 
     Optional<PartType> deletePartType(String token, String codeType)
-            throws BadRequestException, UnauthorizedException, PartTypeNotFoundException;
+            throws UnauthorizedException, PartTypeNotFoundException;
 
 
     List<ActivityDictionary> getActivityDictionaries();
 
     ActivityDictionary addActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
-            throws BadRequestException, UnauthorizedException;
+            throws UnauthorizedException;
 
     Optional<ActivityDictionary> deleteActivityDictionary(String token, String actType)
-            throws BadRequestException, UnauthorizedException, ActivityDictionaryNotFoundException;
+            throws UnauthorizedException, ActivityDictionaryNotFoundException;
 }

@@ -83,7 +83,7 @@ public class UserService implements IUserService {
             throws UnauthorizedException, UserNotFoundException, UnknownRoleException, BadRequestException {
         String role = this.apiClient.getRoleFromTokenInHeader(token);
 
-        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
+        if (role == null || !role.equals(PossibleRoles.ADMIN)) {
             throw new UnauthorizedException();
         }
 
