@@ -7,7 +7,9 @@ import fixie.common.InternalApiClient;
 import fixie.common.PossibleRoles;
 import fixie.common.exception.BadRequestException;
 import fixie.common.exception.UnauthorizedException;
+import fixie.user_service.dto.PrivateDataDTO;
 import fixie.user_service.dto.UserDTO;
+import fixie.user_service.entity.PrivateData;
 import fixie.user_service.exception.*;
 import fixie.user_service.utils.UserServiceUtils;
 import io.jsonwebtoken.Jwts;
@@ -127,5 +129,10 @@ public class UserService implements IUserService {
         this.repository.save(foundUser);
 
         return foundUser;
+    }
+
+    @Override
+    public PrivateData createPrivateData(String token, PrivateDataDTO privateDataDTO) {
+        return null;
     }
 }

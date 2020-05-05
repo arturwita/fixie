@@ -1,10 +1,13 @@
 package fixie.user_service.entity;
 
 import java.io.Serializable;
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 
@@ -30,6 +33,6 @@ public class User implements Serializable {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "id_pers")
-    private Long idPers;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<PrivateData> privateDataSet;
 }

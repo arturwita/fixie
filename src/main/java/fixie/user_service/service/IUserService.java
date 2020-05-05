@@ -2,7 +2,9 @@ package fixie.user_service.service;
 
 import fixie.common.exception.BadRequestException;
 import fixie.common.exception.UnauthorizedException;
+import fixie.user_service.dto.PrivateDataDTO;
 import fixie.user_service.dto.UserDTO;
+import fixie.user_service.entity.PrivateData;
 import fixie.user_service.entity.User;
 import fixie.user_service.exception.*;
 
@@ -15,4 +17,5 @@ public interface IUserService {
     User changePassword(String token, UserDTO userDTO)
             throws BadRequestException, UserNotFoundException;
 
+    PrivateData createPrivateData(String token, PrivateDataDTO privateDataDTO);
 }
