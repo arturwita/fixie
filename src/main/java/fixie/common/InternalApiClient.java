@@ -1,6 +1,6 @@
 package fixie.common;
 
-import fixie.user_service.exception.BadRequestException;
+import fixie.common.exception.UnauthorizedException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -28,8 +28,8 @@ public class InternalApiClient {
         return responseBody;
     }
 
-    public JSONObject decodeTokenRequest(String token) {
-        String url = "https://localhost:8001/decodeToken";
+    public JSONObject verifyToken(String token) {
+        String url = "https://localhost:8001/verifyToken";
 
         HttpUriRequest request = RequestBuilder.get()
                 .setUri(url)
@@ -48,11 +48,11 @@ public class InternalApiClient {
         return  responseBody;
     }
 
-    public String getRoleFromTokenInHeader(String token) throws BadRequestException {
-        JSONObject decodedToken = this.decodeTokenRequest(token);
+    public String getRoleFromTokenInHeader(String token) throws UnauthorizedException {
+        JSONObject decodedToken = this.verifyToken(token);
 
         if (decodedToken == null) {
-            throw new BadRequestException();
+            throw new UnauthorizedException();
         }
 
         String role = null;
