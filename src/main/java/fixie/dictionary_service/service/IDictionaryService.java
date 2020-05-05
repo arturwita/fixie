@@ -19,10 +19,7 @@ public interface IDictionaryService {
     PartType addPartType(String token, PartTypeDTO partTypeDTO)
             throws BadRequestException, UserUnauthorizedException;
 
-    Optional<PartType> deletePartType(String token, PartTypeDTO partTypeDTO)
-            throws BadRequestException, UserUnauthorizedException, PartTypeNotFoundException;
-
-    Optional<PartType> updatePartType(String token, PartTypeDTO partTypeDTO)
+    Optional<PartType> deletePartType(String token, String codeType)
             throws BadRequestException, UserUnauthorizedException, PartTypeNotFoundException;
 
 
@@ -31,9 +28,6 @@ public interface IDictionaryService {
     ActivityDictionary addActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
             throws BadRequestException, UserUnauthorizedException;
 
-    Optional<ActivityDictionary> deleteActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
-            throws BadRequestException, UserUnauthorizedException, ActivityDictionaryNotFoundException;
-
-    Optional<ActivityDictionary> updateActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
+    Optional<ActivityDictionary> deleteActivityDictionary(String token, String actType)
             throws BadRequestException, UserUnauthorizedException, ActivityDictionaryNotFoundException;
 }

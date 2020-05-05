@@ -12,7 +12,6 @@ import fixie.dictionary_service.repository.ActivityDictionaryRepository;
 import fixie.dictionary_service.repository.PartTypeRepository;
 import fixie.user_service.exception.BadRequestException;
 import fixie.user_service.exception.UserUnauthorizedException;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +55,7 @@ public class DictionaryService implements IDictionaryService {
     }
 
     @Override
-    public Optional<PartType> deletePartType(String token, PartTypeDTO partTypeDTO)
+    public Optional<PartType> deletePartType(String token, String codeType)
             throws BadRequestException, UserUnauthorizedException, PartTypeNotFoundException {
         String role = this.apiClient.getRoleFromTokenInHeader(token);
 
@@ -64,34 +63,10 @@ public class DictionaryService implements IDictionaryService {
             throw new UserUnauthorizedException();
         }
 
-        Optional<PartType> partType = this.partTypeRepository.findById(partTypeDTO.codeType);
+        Optional<PartType> partType = this.partTypeRepository.findById(codeType);
 
         if(partType.isPresent()) {
             this.partTypeRepository.delete(partType.get());
-        }
-        else {
-            throw new PartTypeNotFoundException();
-        }
-
-        return partType;
-    }
-
-    @Override
-    public Optional<PartType> updatePartType(String token, PartTypeDTO partTypeDTO)
-            throws BadRequestException, UserUnauthorizedException, PartTypeNotFoundException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
-
-        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
-            throw new UserUnauthorizedException();
-        }
-
-        Optional<PartType> partType = this.partTypeRepository.findById(partTypeDTO.codeType);
-
-        if(partType.isPresent()) {
-            if(partTypeDTO.nameType != null) {
-                partType.get().setNameType(partTypeDTO.nameType);
-            }
-            this.partTypeRepository.save(partType.get());
         }
         else {
             throw new PartTypeNotFoundException();
@@ -125,7 +100,7 @@ public class DictionaryService implements IDictionaryService {
     }
 
     @Override
-    public Optional<ActivityDictionary> deleteActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
+    public Optional<ActivityDictionary> deleteActivityDictionary(String token, String actType)
             throws BadRequestException, UserUnauthorizedException, ActivityDictionaryNotFoundException {
         String role = this.apiClient.getRoleFromTokenInHeader(token);
 
@@ -133,34 +108,10 @@ public class DictionaryService implements IDictionaryService {
             throw new UserUnauthorizedException();
         }
 
-        Optional<ActivityDictionary> activityDictionary = this.activityDictionaryRepository.findById(activityDictionaryDTO.actType);
+        Optional<ActivityDictionary> activityDictionary = this.activityDictionaryRepository.findById(actType);
 
         if(activityDictionary.isPresent()) {
             this.activityDictionaryRepository.delete(activityDictionary.get());
-        }
-        else {
-            throw new ActivityDictionaryNotFoundException();
-        }
-
-        return activityDictionary;
-    }
-
-    @Override
-    public Optional<ActivityDictionary> updateActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
-            throws BadRequestException, UserUnauthorizedException, ActivityDictionaryNotFoundException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
-
-        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
-            throw new UserUnauthorizedException();
-        }
-
-        Optional<ActivityDictionary> activityDictionary = this.activityDictionaryRepository.findById(activityDictionaryDTO.actType);
-
-        if(activityDictionary.isPresent()) {
-            if(activityDictionaryDTO.actName != null) {
-                activityDictionary.get().setActName(activityDictionaryDTO.actName);
-            }
-            this.activityDictionaryRepository.save(activityDictionary.get());
         }
         else {
             throw new ActivityDictionaryNotFoundException();
