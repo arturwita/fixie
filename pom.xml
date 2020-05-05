@@ -11,7 +11,7 @@
 	<groupId>fixie</groupId>
 	<artifactId>user_service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>UserService</name>
+	<name>Fixie</name>
 	<description>An example of a fixing system for companies.</description>
 
 	<properties>
