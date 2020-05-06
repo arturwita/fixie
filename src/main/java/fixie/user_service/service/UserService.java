@@ -23,6 +23,8 @@ import fixie.user_service.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.persistence.EntityNotFoundException;
+
 
 @Service
 public class UserService implements IUserService {
@@ -194,5 +196,20 @@ public class UserService implements IUserService {
         this.privateDataRepository.save(updatedPrivateData);
 
         return updatedPrivateData;
+    }
+
+    @Override
+    public Optional<PrivateData> deletePrivateData(String token, Long id) throws UnauthorizedException, EntityNotFoundException, PrivateDataNotFoundException {
+        String username = this.apiClient.getUsernameFromToken(token);
+        User user = this.userRepository.findByUsername(username);
+        Optional<PrivateData> privateDataOptional = this.privateDataRepository.findById(id);
+
+        if (!privateDataOptional.isPresent()) throw new PrivateDataNotFoundException();
+
+        PrivateData privateData = privateDataOptional.get();
+        if (!privateData.getUser().getId().equals(user.getId())) throw new UnauthorizedException();
+
+        this.privateDataRepository.delete(privateData);
+        return privateDataOptional;
     }
 }

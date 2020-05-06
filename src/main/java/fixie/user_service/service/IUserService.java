@@ -9,6 +9,7 @@ import fixie.user_service.entity.User;
 import fixie.user_service.exception.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface IUserService {
@@ -24,4 +25,6 @@ public interface IUserService {
     List<PrivateData> getUserData(String token) throws UnauthorizedException;
 
     PrivateData updatePrivateData(String token, Long id, PrivateDataDTO privateDataDTO) throws UnauthorizedException;
+
+    Optional<PrivateData> deletePrivateData(String token, Long id) throws UnauthorizedException, PrivateDataNotFoundException;
 }

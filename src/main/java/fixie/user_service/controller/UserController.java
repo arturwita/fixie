@@ -9,6 +9,7 @@ import fixie.user_service.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -63,5 +64,11 @@ public class UserController {
     @PutMapping("/privateData/{id}")
     public PrivateData getUserData(@RequestHeader String token, @PathVariable Long id, @RequestBody PrivateDataDTO privateDataDTO) {
         return userService.updatePrivateData(token, id, privateDataDTO);
+    }
+
+    @SneakyThrows
+    @DeleteMapping("/privateData/{id}")
+    public Optional<PrivateData> deletePrivateData(@RequestHeader String token, @PathVariable Long id) {
+        return userService.deletePrivateData(token, id);
     }
 }
