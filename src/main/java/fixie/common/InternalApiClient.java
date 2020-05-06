@@ -29,7 +29,7 @@ public class InternalApiClient {
     }
 
     public JSONObject verifyToken(String token) {
-        String url = "https://localhost:8001/verifyToken";
+        String url = GlobalConfig.AUTHORIZATION_SERVICE_URL + "/verifyToken";
 
         HttpUriRequest request = RequestBuilder.get()
                 .setUri(url)
@@ -63,5 +63,20 @@ public class InternalApiClient {
         }
 
         return role;
+    }
+
+    public String getUsernameFromToken(String token) throws UnauthorizedException {
+        JSONObject decodedToken = this.verifyToken(token);
+
+        if (decodedToken == null) throw new UnauthorizedException();
+
+        String username;
+        try {
+            username = decodedToken.getString("username");
+        } catch (JSONException e) {
+            throw new UnauthorizedException();
+        }
+
+        return username;
     }
 }

@@ -8,6 +8,8 @@ import fixie.user_service.entity.PrivateData;
 import fixie.user_service.entity.User;
 import fixie.user_service.exception.*;
 
+import java.util.List;
+
 
 public interface IUserService {
     String register(String username, String password) throws UserAlreadyExistsException;
@@ -17,5 +19,9 @@ public interface IUserService {
     User changePassword(String token, UserDTO userDTO)
             throws BadRequestException, UserNotFoundException;
 
-    PrivateData createPrivateData(String token, PrivateDataDTO privateDataDTO);
+    PrivateData createPrivateData(String token, PrivateDataDTO privateDataDTO) throws UnauthorizedException;
+
+    List<PrivateData> getUserData(String token) throws UnauthorizedException;
+
+    PrivateData updatePrivateData(String token, Long id, PrivateDataDTO privateDataDTO) throws UnauthorizedException;
 }

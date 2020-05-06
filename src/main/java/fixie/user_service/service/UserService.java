@@ -11,6 +11,7 @@ import fixie.user_service.dto.PrivateDataDTO;
 import fixie.user_service.dto.UserDTO;
 import fixie.user_service.entity.PrivateData;
 import fixie.user_service.exception.*;
+import fixie.user_service.repository.PrivateDataRepository;
 import fixie.user_service.utils.UserServiceUtils;
 import io.jsonwebtoken.Jwts;
 import fixie.user_service.entity.User;
@@ -26,22 +27,27 @@ import org.springframework.beans.factory.annotation.Value;
 @Service
 public class UserService implements IUserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final PrivateDataRepository privateDataRepository;
 
     private InternalApiClient apiClient;
 
     @Value("${jwt.secret}")
     private String secret;
 
-    public UserService(UserRepository repository) {
-        this.repository = repository;
+    @Value("${jwt.expiration-time}")
+    private Integer expirationTime;
+
+    public UserService(UserRepository userRepository, PrivateDataRepository privateDataRepository) {
+        this.userRepository = userRepository;
+        this.privateDataRepository = privateDataRepository;
         this.apiClient = new InternalApiClient();
     }
 
 
     @Override
     public String register(String username, String password) throws UserAlreadyExistsException {
-        User user = this.repository.findByUsername(username);
+        User user = this.userRepository.findByUsername(username);
         if (user != null) {
             throw new UserAlreadyExistsException();
         }
@@ -49,23 +55,24 @@ public class UserService implements IUserService {
         user = User.builder()
                 .username(username)
                 .password(UserServiceUtils.hashPassword(password))
+                .role(PossibleRoles.CLIENT)
                 .build();
 
-        this.repository.save(user);
+        this.userRepository.save(user);
 
         long now = Instant.now().toEpochMilli();
         return Jwts.builder()
                 .setSubject("User")
                 .claim("username", user.getUsername())
                 .claim("role", user.getRole())
-                .setExpiration(new Date(now + 1200000))
+                .setExpiration(new Date(now + expirationTime))
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
     @Override
     public String login(String username, String password) throws UnauthorizedException {
-        User user = this.repository.findByUsername(username);
+        User user = this.userRepository.findByUsername(username);
         if (user == null || !BCrypt.checkpw(password, user.getPassword())) {
             throw new UnauthorizedException();
         }
@@ -75,32 +82,32 @@ public class UserService implements IUserService {
                 .setSubject("User")
                 .claim("username", user.getUsername())
                 .claim("role", user.getRole())
-                .setExpiration(new Date(now + 1200000))
+                .setExpiration(new Date(now + expirationTime))
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
     @Override
     public User grantRole(String token, UserDTO userDTO)
-            throws UnauthorizedException, UserNotFoundException, UnknownRoleException, BadRequestException {
+            throws UnauthorizedException, UserNotFoundException, UnknownRoleException {
         String role = this.apiClient.getRoleFromTokenInHeader(token);
 
         if (role == null || !role.equals(PossibleRoles.ADMIN)) {
             throw new UnauthorizedException();
         }
 
-        User foundUser = this.repository.findByUsername(userDTO.username);
-        if(foundUser == null) {
+        User foundUser = this.userRepository.findByUsername(userDTO.username);
+        if (foundUser == null) {
             throw new UserNotFoundException();
         }
 
         List<String> roles = PossibleRoles.getPossibleRoles();
-        if(!roles.contains(userDTO.role)) {
+        if (!roles.contains(userDTO.role)) {
             throw new UnknownRoleException();
         }
 
         foundUser.setRole(userDTO.role);
-        this.repository.save(foundUser);
+        this.userRepository.save(foundUser);
 
         return foundUser;
     }
@@ -119,20 +126,73 @@ public class UserService implements IUserService {
             e.printStackTrace();
         }
 
-        User foundUser = this.repository.findByUsername(username);
-        if(foundUser == null) {
+        User foundUser = this.userRepository.findByUsername(username);
+        if (foundUser == null) {
             throw new UserNotFoundException();
         }
 
         String hashedPassword = UserServiceUtils.hashPassword(userDTO.password);
         foundUser.setPassword(hashedPassword);
-        this.repository.save(foundUser);
+        this.userRepository.save(foundUser);
 
         return foundUser;
     }
 
     @Override
-    public PrivateData createPrivateData(String token, PrivateDataDTO privateDataDTO) {
-        return null;
+    public PrivateData createPrivateData(String token, PrivateDataDTO privateDataDTO) throws UnauthorizedException {
+        String username = this.apiClient.getUsernameFromToken(token);
+        User user = this.userRepository.findByUsername(username);
+
+        PrivateData privateData = PrivateData.builder()
+                .firstName(privateDataDTO.firstName)
+                .lastName(privateDataDTO.lastName)
+                .email(privateDataDTO.email)
+                .telephone(privateDataDTO.telephone)
+                .postalCode(privateDataDTO.postalCode)
+                .street(privateDataDTO.street)
+                .houseNumber(privateDataDTO.houseNumber)
+                .city(privateDataDTO.city)
+                .taxNumber(privateDataDTO.taxNumber)
+                .user(user)
+                .build();
+
+        this.privateDataRepository.save(privateData);
+
+        return privateData;
+    }
+
+    @Override
+    public List<PrivateData> getUserData(String token) throws UnauthorizedException {
+        String username = this.apiClient.getUsernameFromToken(token);
+        User user = this.userRepository.findByUsername(username);
+
+        return user.getPrivateDataList();
+    }
+
+    @Override
+    public PrivateData updatePrivateData(String token, Long id, PrivateDataDTO privateDataDTO) throws UnauthorizedException {
+        String username = this.apiClient.getUsernameFromToken(token);
+        User user = this.userRepository.findByUsername(username);
+        PrivateData privateData = this.privateDataRepository.getOne(id);
+
+        if (!privateData.getUser().getId().equals(user.getId())) throw new UnauthorizedException();
+
+        PrivateData updatedPrivateData = PrivateData.builder()
+                .firstName(privateDataDTO.firstName)
+                .lastName(privateDataDTO.lastName)
+                .email(privateDataDTO.email)
+                .telephone(privateDataDTO.telephone)
+                .postalCode(privateDataDTO.postalCode)
+                .street(privateDataDTO.street)
+                .houseNumber(privateDataDTO.houseNumber)
+                .city(privateDataDTO.city)
+                .taxNumber(privateDataDTO.taxNumber)
+                .user(user)
+                .id(privateData.getId())
+                .build();
+
+        this.privateDataRepository.save(updatedPrivateData);
+
+        return updatedPrivateData;
     }
 }

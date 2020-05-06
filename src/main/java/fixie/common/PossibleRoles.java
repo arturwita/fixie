@@ -10,7 +10,7 @@ public class PossibleRoles {
     public static String CLIENT = "CLI";
     public static String UNREGISTERED_CLIENT = "UCLI";
 
-    public static List<String> getPossibleRoles(){
+    public static List<String> getPossibleRoles() {
         ArrayList<String> roles = new ArrayList<>();
         roles.add(MANAGER);
         roles.add(WORKER);

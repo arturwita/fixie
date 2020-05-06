@@ -1,6 +1,8 @@
 package fixie.user_service.dto;
 
 
+import com.sun.istack.Nullable;
+
 public class PrivateDataDTO {
 
     public String firstName;
@@ -19,5 +21,6 @@ public class PrivateDataDTO {
 
     public String city;
 
+    @Nullable
     public String taxNumber;
 }
