@@ -4,7 +4,7 @@ import java.util.*;
 import java.time.Instant;
 
 import fixie.common.InternalApiClient;
-import fixie.common.PossibleRoles;
+import fixie.common.Roles;
 import fixie.common.exception.BadRequestException;
 import fixie.common.exception.UnauthorizedException;
 import fixie.user_service.dto.PrivateDataDTO;
@@ -32,7 +32,7 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final PrivateDataRepository privateDataRepository;
 
-    private InternalApiClient apiClient;
+    private final InternalApiClient apiClient;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -57,7 +57,7 @@ public class UserService implements IUserService {
         user = User.builder()
                 .username(username)
                 .password(UserServiceUtils.hashPassword(password))
-                .role(PossibleRoles.CLIENT)
+                .role(Roles.CLIENT)
                 .build();
 
         this.userRepository.save(user);
@@ -92,9 +92,9 @@ public class UserService implements IUserService {
     @Override
     public User grantRole(String token, UserDTO userDTO)
             throws UnauthorizedException, UserNotFoundException, UnknownRoleException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
+        String role = this.apiClient.getRoleFromToken(token);
 
-        if (role == null || !role.equals(PossibleRoles.ADMIN)) {
+        if (role == null || !role.equals(Roles.ADMIN)) {
             throw new UnauthorizedException();
         }
 
@@ -103,7 +103,7 @@ public class UserService implements IUserService {
             throw new UserNotFoundException();
         }
 
-        List<String> roles = PossibleRoles.getPossibleRoles();
+        List<String> roles = Roles.getPossibleRoles();
         if (!roles.contains(userDTO.role)) {
             throw new UnknownRoleException();
         }

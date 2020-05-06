@@ -48,18 +48,18 @@ public class InternalApiClient {
         return  responseBody;
     }
 
-    public String getRoleFromTokenInHeader(String token) throws UnauthorizedException {
+    public String getRoleFromToken(String token) throws UnauthorizedException {
         JSONObject decodedToken = this.verifyToken(token);
 
         if (decodedToken == null) {
             throw new UnauthorizedException();
         }
 
-        String role = null;
+        String role;
         try {
             role = decodedToken.getString("role");
         } catch (JSONException e) {
-            e.printStackTrace();
+            throw new UnauthorizedException();
         }
 
         return role;

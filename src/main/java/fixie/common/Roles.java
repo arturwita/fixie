@@ -3,7 +3,7 @@ package fixie.common;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PossibleRoles {
+public class Roles {
     public static String MANAGER = "MAN";
     public static String WORKER = "WORK";
     public static String ADMIN = "ADM";

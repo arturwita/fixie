@@ -1,7 +1,7 @@
 package fixie.dictionary_service.service;
 
 import fixie.common.InternalApiClient;
-import fixie.common.PossibleRoles;
+import fixie.common.Roles;
 import fixie.dictionary_service.dto.ActivityDictionaryDTO;
 import fixie.dictionary_service.dto.PartTypeDTO;
 import fixie.dictionary_service.entity.ActivityDictionary;
@@ -38,9 +38,9 @@ public class DictionaryService implements IDictionaryService {
 
     @Override
     public PartType addPartType(String token, PartTypeDTO partTypeDTO) throws UnauthorizedException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
+        String role = this.apiClient.getRoleFromToken(token);
 
-        if (role == null || !role.equals(PossibleRoles.ADMIN)) {
+        if (role == null || !role.equals(Roles.ADMIN)) {
             throw new UnauthorizedException();
         }
 
@@ -57,9 +57,9 @@ public class DictionaryService implements IDictionaryService {
     @Override
     public Optional<PartType> deletePartType(String token, String codeType)
             throws UnauthorizedException, PartTypeNotFoundException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
+        String role = this.apiClient.getRoleFromToken(token);
 
-        if (role == null || !role.equals(PossibleRoles.ADMIN)) {
+        if (role == null || !role.equals(Roles.ADMIN)) {
             throw new UnauthorizedException();
         }
 
@@ -82,9 +82,9 @@ public class DictionaryService implements IDictionaryService {
     @Override
     public ActivityDictionary addActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
             throws UnauthorizedException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
+        String role = this.apiClient.getRoleFromToken(token);
 
-        if (role == null || !role.equals(PossibleRoles.ADMIN)) {
+        if (role == null || !role.equals(Roles.ADMIN)) {
             throw new UnauthorizedException();
         }
 
@@ -101,9 +101,9 @@ public class DictionaryService implements IDictionaryService {
     @Override
     public Optional<ActivityDictionary> deleteActivityDictionary(String token, String actType)
             throws UnauthorizedException, ActivityDictionaryNotFoundException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
+        String role = this.apiClient.getRoleFromToken(token);
 
-        if (role == null || !role.equals(PossibleRoles.ADMIN)) {
+        if (role == null || !role.equals(Roles.ADMIN)) {
             throw new UnauthorizedException();
         }
 
