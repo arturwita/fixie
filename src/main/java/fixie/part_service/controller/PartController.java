@@ -25,7 +25,7 @@ public class PartController {
 
     @SneakyThrows
     @PostMapping("/part")
-    public Part addActivityDictionary(@RequestHeader String token,
+    public Part addPart(@RequestHeader String token,
                                       @Valid @RequestBody PartDTO partDTO) {
         roleService.checkTokenRole(token, Roles.ADMIN);
         return partService.addPart(partDTO);
@@ -33,14 +33,14 @@ public class PartController {
 
     @SneakyThrows
     @DeleteMapping("/part/{id}")
-    public Optional<Part> deleteActivityDictionary(@RequestHeader String token,
+    public Optional<Part> deletePart(@RequestHeader String token,
                                                    @PathVariable Long id) {
         roleService.checkTokenRole(token, Roles.ADMIN);
         return partService.deletePart(id);
     }
 
     @GetMapping("/parts")
-    public List<Part> getActivityDictionaries() {
+    public List<Part> getParts() {
         return partService.getParts();
     }
 }
