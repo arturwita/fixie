@@ -36,12 +36,12 @@ public class PartService implements IPartService {
 
     @Override
     public Optional<Part> deletePart(Long id) throws PartNotFoundException {
-        Optional<Part> partType = partRepository.findById(id);
+        Optional<Part> part = partRepository.findById(id);
 
-        if (!partType.isPresent()) throw new PartNotFoundException();
+        if (!part.isPresent()) throw new PartNotFoundException();
 
-        partRepository.delete(partType.get());
+        partRepository.delete(part.get());
 
-        return partType;
+        return part;
     }
 }
