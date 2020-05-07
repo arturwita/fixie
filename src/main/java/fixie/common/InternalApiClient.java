@@ -79,4 +79,19 @@ public class InternalApiClient {
 
         return username;
     }
+
+    public Long getIdFromToken(String token) throws UnauthorizedException {
+        JSONObject decodedToken = this.verifyToken(token);
+
+        if (decodedToken == null) throw new UnauthorizedException();
+
+        Long userId;
+        try {
+            userId = Long.parseLong(decodedToken.getString("id"));
+        } catch (JSONException e) {
+            throw new UnauthorizedException();
+        }
+
+        return userId;
+    }
 }
