@@ -1,7 +1,7 @@
 package fixie.dictionary_service.service;
 
 import fixie.common.InternalApiClient;
-import fixie.common.PossibleRoles;
+import fixie.common.Roles;
 import fixie.dictionary_service.dto.ActivityDictionaryDTO;
 import fixie.dictionary_service.dto.PartTypeDTO;
 import fixie.dictionary_service.entity.ActivityDictionary;
@@ -10,9 +10,9 @@ import fixie.dictionary_service.exception.ActivityDictionaryNotFoundException;
 import fixie.dictionary_service.exception.PartTypeNotFoundException;
 import fixie.dictionary_service.repository.ActivityDictionaryRepository;
 import fixie.dictionary_service.repository.PartTypeRepository;
-import fixie.user_service.exception.BadRequestException;
-import fixie.user_service.exception.UserUnauthorizedException;
+import fixie.common.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -37,11 +37,11 @@ public class DictionaryService implements IDictionaryService {
     }
 
     @Override
-    public PartType addPartType(String token, PartTypeDTO partTypeDTO) throws BadRequestException, UserUnauthorizedException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
+    public PartType addPartType(String token, PartTypeDTO partTypeDTO) throws UnauthorizedException {
+        String role = this.apiClient.getRoleFromToken(token);
 
-        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
-            throw new UserUnauthorizedException();
+        if (role == null || !role.equals(Roles.ADMIN)) {
+            throw new UnauthorizedException();
         }
 
         PartType partType = PartType.builder()
@@ -56,19 +56,18 @@ public class DictionaryService implements IDictionaryService {
 
     @Override
     public Optional<PartType> deletePartType(String token, String codeType)
-            throws BadRequestException, UserUnauthorizedException, PartTypeNotFoundException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
+            throws UnauthorizedException, PartTypeNotFoundException {
+        String role = this.apiClient.getRoleFromToken(token);
 
-        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
-            throw new UserUnauthorizedException();
+        if (role == null || !role.equals(Roles.ADMIN)) {
+            throw new UnauthorizedException();
         }
 
         Optional<PartType> partType = this.partTypeRepository.findById(codeType);
 
-        if(partType.isPresent()) {
+        if (partType.isPresent()) {
             this.partTypeRepository.delete(partType.get());
-        }
-        else {
+        } else {
             throw new PartTypeNotFoundException();
         }
 
@@ -82,11 +81,11 @@ public class DictionaryService implements IDictionaryService {
 
     @Override
     public ActivityDictionary addActivityDictionary(String token, ActivityDictionaryDTO activityDictionaryDTO)
-            throws BadRequestException, UserUnauthorizedException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
+            throws UnauthorizedException {
+        String role = this.apiClient.getRoleFromToken(token);
 
-        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
-            throw new UserUnauthorizedException();
+        if (role == null || !role.equals(Roles.ADMIN)) {
+            throw new UnauthorizedException();
         }
 
         ActivityDictionary activityDictionary = ActivityDictionary.builder()
@@ -101,19 +100,18 @@ public class DictionaryService implements IDictionaryService {
 
     @Override
     public Optional<ActivityDictionary> deleteActivityDictionary(String token, String actType)
-            throws BadRequestException, UserUnauthorizedException, ActivityDictionaryNotFoundException {
-        String role = this.apiClient.getRoleFromTokenInHeader(token);
+            throws UnauthorizedException, ActivityDictionaryNotFoundException {
+        String role = this.apiClient.getRoleFromToken(token);
 
-        if (role == null || !role.equals(PossibleRoles.ADMIN_MNEMO)) {
-            throw new UserUnauthorizedException();
+        if (role == null || !role.equals(Roles.ADMIN)) {
+            throw new UnauthorizedException();
         }
 
         Optional<ActivityDictionary> activityDictionary = this.activityDictionaryRepository.findById(actType);
 
-        if(activityDictionary.isPresent()) {
+        if (activityDictionary.isPresent()) {
             this.activityDictionaryRepository.delete(activityDictionary.get());
-        }
-        else {
+        } else {
             throw new ActivityDictionaryNotFoundException();
         }
 

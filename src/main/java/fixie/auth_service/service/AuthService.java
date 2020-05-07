@@ -17,21 +17,24 @@ public class AuthService implements IAuthService {
     private String secret;
 
     @Override
-    public Claims decodeToken(String token) throws SignatureException {
+    public Claims verifyToken(String token) throws SignatureException {
         return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token).getBody();
     }
 
-//    @Override
-//    public String refreshToken() throws SignatureException {
-//        long now = Instant.now().toEpochMilli();
-//
-//        return Jwts.builder()
-//                .setSubject("username")
-//                .setExpiration(new Date(now + 10000))
-//                .signWith(SignatureAlgorithm.HS256, secret)
-//                .compact();
-//    }
+    @Override
+    public String refreshToken(String oldToken) throws SignatureException {
+        long now = Instant.now().toEpochMilli();
+
+        // will throw Exception if old token is wrong or expired - new token MUST be obtained before old expires
+        this.verifyToken(oldToken);
+
+        return Jwts.builder()
+                .setSubject("username")
+                .setExpiration(new Date(now + 10000))
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+    }
 
 }

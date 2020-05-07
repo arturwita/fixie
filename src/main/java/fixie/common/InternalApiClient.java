@@ -1,6 +1,6 @@
 package fixie.common;
 
-import fixie.user_service.exception.BadRequestException;
+import fixie.common.exception.UnauthorizedException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -28,8 +28,8 @@ public class InternalApiClient {
         return responseBody;
     }
 
-    public JSONObject decodeTokenRequest(String token) {
-        String url = "https://localhost:8001/decodeToken";
+    public JSONObject verifyToken(String token) {
+        String url = GlobalConfig.AUTHORIZATION_SERVICE_URL + "/verifyToken";
 
         HttpUriRequest request = RequestBuilder.get()
                 .setUri(url)
@@ -48,20 +48,35 @@ public class InternalApiClient {
         return  responseBody;
     }
 
-    public String getRoleFromTokenInHeader(String token) throws BadRequestException {
-        JSONObject decodedToken = this.decodeTokenRequest(token);
+    public String getRoleFromToken(String token) throws UnauthorizedException {
+        JSONObject decodedToken = this.verifyToken(token);
 
         if (decodedToken == null) {
-            throw new BadRequestException();
+            throw new UnauthorizedException();
         }
 
-        String role = null;
+        String role;
         try {
             role = decodedToken.getString("role");
         } catch (JSONException e) {
-            e.printStackTrace();
+            throw new UnauthorizedException();
         }
 
         return role;
+    }
+
+    public String getUsernameFromToken(String token) throws UnauthorizedException {
+        JSONObject decodedToken = this.verifyToken(token);
+
+        if (decodedToken == null) throw new UnauthorizedException();
+
+        String username;
+        try {
+            username = decodedToken.getString("username");
+        } catch (JSONException e) {
+            throw new UnauthorizedException();
+        }
+
+        return username;
     }
 }
