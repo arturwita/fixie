@@ -1,4 +1,4 @@
-package fixie.request_service.entity;
+package fixie.order_service.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Table(name = "request")
 @Builder(toBuilder = true)
-public class Request implements Serializable {
+public class Order implements Serializable {
 
     @Id
     @Column(name = "id_order")
@@ -27,6 +27,6 @@ public class Request implements Serializable {
     private Long customerId;
 
     @Column(name = "status")
-    @Size(max = 20)
+    @Size(max = 3)
     private String status;
 }

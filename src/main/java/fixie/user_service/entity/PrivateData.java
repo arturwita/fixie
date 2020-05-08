@@ -50,8 +50,8 @@ public class PrivateData implements Serializable {
     @Column(name = "taxNumber")
     private String taxNumber;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
     private User user;
 }

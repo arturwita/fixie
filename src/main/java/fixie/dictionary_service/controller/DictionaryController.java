@@ -28,14 +28,14 @@ public class DictionaryController {
      */
 
     @SneakyThrows
-    @PostMapping("/partTypes")
+    @PostMapping("/partType")
     public PartType addPartType(@RequestHeader String token, @Valid @RequestBody PartTypeDTO partTypeDTO) {
         return dictionaryService.addPartType(token, partTypeDTO);
     }
 
     @SneakyThrows
-    @DeleteMapping("/partTypes")
-    public Optional<PartType> deletePartType(@RequestHeader String token, @RequestParam("codeType") String codeType) {
+    @DeleteMapping("/partType/{codeType}")
+    public Optional<PartType> deletePartType(@RequestHeader String token, @PathVariable String codeType) {
         return dictionaryService.deletePartType(token, codeType);
     }
 
@@ -58,13 +58,12 @@ public class DictionaryController {
     }
 
     @SneakyThrows
-    @DeleteMapping("/activityDictionary")
-    public Optional<ActivityDictionary> deleteActivityDictionary(@RequestHeader String token,
-                                                                 @RequestParam("actType") String actType) {
+    @DeleteMapping("/activityDictionary/{actType}")
+    public Optional<ActivityDictionary> deleteActivityDictionary(@RequestHeader String token, @PathVariable String actType) {
         return dictionaryService.deleteActivityDictionary(token, actType);
     }
 
-    @GetMapping("/activityDictionary")
+    @GetMapping("/activityDictionaries")
     public List<ActivityDictionary> getActivityDictionaries() {
         return dictionaryService.getActivityDictionaries();
     }

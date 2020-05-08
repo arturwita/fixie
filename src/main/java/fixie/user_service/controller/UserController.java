@@ -3,9 +3,9 @@ package fixie.user_service.controller;
 import fixie.user_service.dto.PrivateDataDTO;
 import fixie.user_service.entity.PrivateData;
 import fixie.user_service.entity.User;
-import lombok.SneakyThrows;
 import fixie.user_service.dto.UserDTO;
 import fixie.user_service.service.UserService;
+import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,7 +62,9 @@ public class UserController {
 
     @SneakyThrows
     @PutMapping("/privateData/{id}")
-    public PrivateData getUserData(@RequestHeader String token, @PathVariable Long id, @RequestBody PrivateDataDTO privateDataDTO) {
+    public PrivateData updateUserData(@RequestHeader String token,
+                                      @PathVariable Long id,
+                                      @RequestBody PrivateDataDTO privateDataDTO) {
         return userService.updatePrivateData(token, id, privateDataDTO);
     }
 

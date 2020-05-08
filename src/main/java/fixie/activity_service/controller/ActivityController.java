@@ -4,7 +4,6 @@ import fixie.activity_service.dto.ActivityDTO;
 import fixie.activity_service.dto.SingleActivityDTO;
 import fixie.activity_service.entity.Activity;
 import fixie.activity_service.service.ActivityService;
-import fixie.common.InternalApiClient;
 import fixie.common.Roles;
 import fixie.common.service.RoleService;
 import lombok.SneakyThrows;
@@ -17,8 +16,6 @@ import java.util.List;
 public class ActivityController {
     private final ActivityService activityService;
     private final RoleService roleService;
-    private final InternalApiClient internalApiClient = new InternalApiClient();
-
     private final String[] managingRoles = {Roles.WORKER, Roles.MANAGER, Roles.ADMIN};
 
     public ActivityController(ActivityService activityService, RoleService roleService) {
@@ -26,7 +23,6 @@ public class ActivityController {
         this.roleService = roleService;
     }
 
-    @SneakyThrows
     @PostMapping("/activities")
     public List<Activity> createActivities(@RequestBody ActivityDTO activityDTO) {
         // TODO: check if token's user ID matches the Request's user ID (call RequestService to obtain that info, or make HEAD endpoint there which will return 4xx error if not)

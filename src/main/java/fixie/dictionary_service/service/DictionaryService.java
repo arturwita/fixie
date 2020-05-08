@@ -2,6 +2,7 @@ package fixie.dictionary_service.service;
 
 import fixie.common.InternalApiClient;
 import fixie.common.Roles;
+import fixie.common.exception.UnauthorizedException;
 import fixie.dictionary_service.dto.ActivityDictionaryDTO;
 import fixie.dictionary_service.dto.PartTypeDTO;
 import fixie.dictionary_service.entity.ActivityDictionary;
@@ -10,7 +11,6 @@ import fixie.dictionary_service.exception.ActivityDictionaryNotFoundException;
 import fixie.dictionary_service.exception.PartTypeNotFoundException;
 import fixie.dictionary_service.repository.ActivityDictionaryRepository;
 import fixie.dictionary_service.repository.PartTypeRepository;
-import fixie.common.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

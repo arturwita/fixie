@@ -1,4 +1,4 @@
-package fixie.activity_service.entity;
+package fixie.order_service.entity;
 
 import java.util.ArrayList;
 import java.util.List;

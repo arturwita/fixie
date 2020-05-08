@@ -27,7 +27,7 @@ public class Activity implements Serializable {
     private Long orderId;
 
     @Column(name = "status")
-    @Size(max = 20)
+    @Size(max = 3)
     private String status;
 
     @Column(name = "worker_id")

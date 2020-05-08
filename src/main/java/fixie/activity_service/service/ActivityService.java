@@ -5,6 +5,7 @@ import fixie.activity_service.dto.SingleActivityDTO;
 import fixie.activity_service.entity.Activity;
 import fixie.activity_service.entity.Status;
 import fixie.activity_service.exception.ActivityNotFoundException;
+import fixie.activity_service.exception.UnknownStatusException;
 import fixie.activity_service.repository.ActivityRepository;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class ActivityService implements IActivityService {
                     .orderId(activityDTO.orderId)
                     .partId(singleActivity.partId)
                     .activityType(singleActivity.activityType)
-                    .status(Status.DEFAULT_STATUS)
+                    .status(Status.OPEN)
                     .build();
 
             activities.add(activity);
@@ -44,11 +45,17 @@ public class ActivityService implements IActivityService {
     }
 
     @Override
-    public Activity updateActivity(Long id, SingleActivityDTO activityDTO) throws ActivityNotFoundException {
+    public Activity updateActivity(Long id, SingleActivityDTO activityDTO)
+            throws ActivityNotFoundException, UnknownStatusException {
         Optional<Activity> activityOptional = activityRepository.findById(id);
 
         if(!activityOptional.isPresent()) throw new ActivityNotFoundException();
         Activity activity = activityOptional.get();
+
+        List<String> statuses = Status.getPossibleStatuses();
+        if (!statuses.contains(activityDTO.status)) {
+            throw new UnknownStatusException();
+        }
 
         // if it didn't come in DTO - don't update that field
         String newStatus = activityDTO.status != null ? activityDTO.status : activity.getStatus();
