@@ -25,9 +25,9 @@ public class PartController {
 
     @SneakyThrows
     @PostMapping("/part")
-    public Part addPart(@RequestHeader String token,
+    public Part addPart(/*@RequestHeader String token,*/
                         @Valid @RequestBody PartDTO partDTO) {
-        roleService.checkTokenRole(token, Roles.ADMIN);
+//        roleService.checkTokenRole(token, Roles.ADMIN);
         return partService.addPart(partDTO);
     }
 
