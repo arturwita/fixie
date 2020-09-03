@@ -23,9 +23,8 @@ public class InternalApiClient {
 
     private JSONObject getResponseBody(HttpResponse response) throws IOException, JSONException {
         String content = EntityUtils.toString(response.getEntity());
-        JSONObject responseBody = new JSONObject(content);
 
-        return responseBody;
+        return new JSONObject(content);
     }
 
     public JSONObject verifyToken(String token) {
@@ -68,7 +67,9 @@ public class InternalApiClient {
     public String getUsernameFromToken(String token) throws UnauthorizedException {
         JSONObject decodedToken = this.verifyToken(token);
 
-        if (decodedToken == null) throw new UnauthorizedException();
+        if (decodedToken == null) {
+            throw new UnauthorizedException();
+        }
 
         String username;
         try {
@@ -78,5 +79,22 @@ public class InternalApiClient {
         }
 
         return username;
+    }
+
+    public Long getIdFromToken(String token) throws UnauthorizedException {
+        JSONObject decodedToken = this.verifyToken(token);
+
+        if (decodedToken == null) {
+            throw new UnauthorizedException();
+        }
+
+        Long userId;
+        try {
+            userId = Long.parseLong(decodedToken.getString("id"));
+        } catch (JSONException e) {
+            throw new UnauthorizedException();
+        }
+
+        return userId;
     }
 }

@@ -65,6 +65,7 @@ public class UserService implements IUserService {
         long now = Instant.now().toEpochMilli();
         return Jwts.builder()
                 .setSubject("User")
+                .claim("id", user.getId())
                 .claim("username", user.getUsername())
                 .claim("role", user.getRole())
                 .setExpiration(new Date(now + expirationTime))
@@ -82,6 +83,7 @@ public class UserService implements IUserService {
         long now = Instant.now().toEpochMilli();
         return Jwts.builder()
                 .setSubject("User")
+                .claim("id", user.getId())
                 .claim("username", user.getUsername())
                 .claim("role", user.getRole())
                 .setExpiration(new Date(now + expirationTime))

@@ -25,16 +25,16 @@ public class PartController {
 
     @SneakyThrows
     @PostMapping("/part")
-    public Part addPart(@RequestHeader String token,
-                                      @Valid @RequestBody PartDTO partDTO) {
-        roleService.checkTokenRole(token, Roles.ADMIN);
+    public Part addPart(/*@RequestHeader String token,*/
+                        @Valid @RequestBody PartDTO partDTO) {
+//        roleService.checkTokenRole(token, Roles.ADMIN);
         return partService.addPart(partDTO);
     }
 
     @SneakyThrows
     @DeleteMapping("/part/{id}")
     public Optional<Part> deletePart(@RequestHeader String token,
-                                                   @PathVariable Long id) {
+                                     @PathVariable Long id) {
         roleService.checkTokenRole(token, Roles.ADMIN);
         return partService.deletePart(id);
     }

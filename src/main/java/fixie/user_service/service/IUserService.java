@@ -14,11 +14,15 @@ import java.util.Optional;
 
 public interface IUserService {
     String register(String username, String password) throws UserAlreadyExistsException;
+
     String login(String username, String password) throws UnauthorizedException;
+
     User grantRole(String token, UserDTO userDTO)
             throws UnauthorizedException, UserNotFoundException, UnknownRoleException, BadRequestException;
+
     User changePassword(String token, UserDTO userDTO)
             throws BadRequestException, UserNotFoundException;
+
 
     PrivateData createPrivateData(String token, PrivateDataDTO privateDataDTO) throws UnauthorizedException;
 
@@ -26,5 +30,6 @@ public interface IUserService {
 
     PrivateData updatePrivateData(String token, Long id, PrivateDataDTO privateDataDTO) throws UnauthorizedException;
 
-    Optional<PrivateData> deletePrivateData(String token, Long id) throws UnauthorizedException, PrivateDataNotFoundException;
+    Optional<PrivateData> deletePrivateData(String token, Long id)
+            throws UnauthorizedException, PrivateDataNotFoundException;
 }
