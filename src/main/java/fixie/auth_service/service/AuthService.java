@@ -57,7 +57,10 @@ public class AuthService implements IAuthService {
         long now = Instant.now().toEpochMilli();
 
         return Jwts.builder()
-                .setSubject("username")
+                .setSubject("User")
+                .claim("id", parsedToken.getId())
+                .claim("username", parsedToken.get("username"))
+                .claim("role", parsedToken.get("role"))
                 .setExpiration(new Date(now + expirationTime))
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
